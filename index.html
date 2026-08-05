@@ -1,38 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Angry ❤️ Love</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Truce &amp; Kisses — Angry Bird vs Love Bird</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-
 </head>
-
 <body>
 
-<h1>Angry Bird ❤️ Love Bird</h1>
-
-<div id="score">
-Love: <span id="love">50</span>
-&nbsp;&nbsp;&nbsp;
-Anger: <span id="anger">100</span>
+<div id="sky">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+  <div id="sun"></div>
 </div>
 
-<div id="game">
+<header id="hud">
+  <div class="title-wrap">
+    <h1>Truce &amp; Kisses</h1>
+    <p class="subtitle">get the anger to zero, the love to full, and watch the two birds make peace</p>
+  </div>
 
-<div id="angry" class="bird">
-🐦
+  <div class="stat-row">
+    <div class="stat anger-stat">
+      <span class="stat-label">🔥 Anger</span>
+      <div class="bar-track"><div id="angerFill" class="bar-fill anger-fill"></div></div>
+      <span id="angerNum" class="stat-num">100</span>
+    </div>
+    <div class="stat love-stat">
+      <span class="stat-label">Love ❤️</span>
+      <div class="bar-track"><div id="loveFill" class="bar-fill love-fill"></div></div>
+      <span id="loveNum" class="stat-num">50</span>
+    </div>
+  </div>
+
+  <div class="meta-row">
+    <div id="timer">⏱ 60</div>
+    <div id="combo"></div>
+  </div>
+</header>
+
+<!-- signature element: the peace vine, blooms as the birds make peace -->
+<div id="vineTrack" aria-hidden="true">
+  <svg id="vineSvg" viewBox="0 0 1000 60" preserveAspectRatio="none">
+    <path id="vinePath" d="M0,45 Q 500,15 1000,45" />
+  </svg>
+  <div id="vineBlooms"></div>
 </div>
 
-<div id="lovebird" class="bird">
-🐤
+<main id="game">
+  <div id="ground"></div>
+  <div id="angry" class="bird angry-bird">
+    <div class="bird-emoji">😠</div>
+    <div class="bird-shadow"></div>
+  </div>
+  <div id="lovebird" class="bird love-bird">
+    <div class="bird-emoji">🥰</div>
+    <div class="bird-shadow"></div>
+  </div>
+  <div id="fx-layer"></div>
+</main>
+
+<div id="overlay" class="hidden">
+  <div id="overlayCard">
+    <h2 id="overlayTitle">LOVE WINS</h2>
+    <p id="overlaySub"></p>
+    <button id="restartBtn">Play again</button>
+  </div>
 </div>
 
-</div>
-
-<div id="message"></div>
+<footer id="controls">
+  <div class="control-group">
+    <span class="control-label">😠 move</span>
+    <button class="ctrl-btn" data-move="angry-left">◀</button>
+    <button class="ctrl-btn" data-move="angry-right">▶</button>
+  </div>
+  <div class="control-hint">keyboard: <kbd>A</kbd>/<kbd>D</kbd> move angry bird · <kbd>←</kbd>/<kbd>→</kbd> move love bird</div>
+  <div class="control-group">
+    <span class="control-label">love 🥰 move</span>
+    <button class="ctrl-btn" data-move="love-left">◀</button>
+    <button class="ctrl-btn" data-move="love-right">▶</button>
+  </div>
+</footer>
 
 <script src="script.js"></script>
-
 </body>
 </html>
