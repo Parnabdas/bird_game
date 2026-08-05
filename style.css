@@ -1,99 +1,254 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
 body{
 
-margin:0;
-background:#9ed9ff;
-overflow:hidden;
-font-family:Arial;
-text-align:center;
+    font-family:Arial, Helvetica, sans-serif;
+    overflow:hidden;
 
+    background:linear-gradient(
+        #87CEEB 0%,
+        #9fdcff 45%,
+        #7bc96f 46%,
+        #5fa84b 100%
+    );
+
+    height:100vh;
 }
 
 h1{
 
-margin-top:20px;
+    text-align:center;
+    margin-top:15px;
+    font-size:48px;
+    color:#222;
+}
 
+#score{
+
+    text-align:center;
+    font-size:30px;
+    margin-top:15px;
+    font-weight:bold;
 }
 
 #game{
 
-position:relative;
-width:100vw;
-height:80vh;
+    position:relative;
 
+    width:100vw;
+    height:82vh;
+
+    overflow:hidden;
 }
+
+/* Ground */
+
+#game::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+    height:70px;
+
+    background:#5d4037;
+}
+
+/* Birds */
 
 .bird{
 
-position:absolute;
-font-size:70px;
-bottom:60px;
+    position:absolute;
 
+    bottom:70px;
+
+    font-size:80px;
+
+    user-select:none;
+
+    transition:left .15s linear;
 }
 
 #angry{
 
-left:120px;
-
+    left:100px;
 }
 
 #lovebird{
 
-right:120px;
-
+    left:calc(100vw - 180px);
 }
+
+/* Fire */
 
 .fire{
 
-position:absolute;
-font-size:35px;
-animation:fireMove 3s linear forwards;
+    position:absolute;
 
+    font-size:40px;
+
+    animation:fireFly 2s linear forwards;
+
+    z-index:5;
 }
+
+/* Heart */
 
 .heart{
 
-position:absolute;
-font-size:35px;
-animation:heartMove 3s linear forwards;
+    position:absolute;
+
+    font-size:40px;
+
+    animation:heartFly 2s linear forwards;
+
+    z-index:5;
+}
+
+@keyframes fireFly{
+
+    from{
+
+        transform:translateX(0);
+    }
+
+    to{
+
+        transform:translateX(900px);
+    }
 
 }
 
-@keyframes fireMove{
+@keyframes heartFly{
 
-from{
+    from{
 
-left:170px;
+        transform:translateX(0);
+    }
 
-}
+    to{
 
-to{
-
-left:80%;
-
-}
-
-}
-
-@keyframes heartMove{
-
-from{
-
-right:170px;
-
-}
-
-to{
-
-right:80%;
-
-}
+        transform:translateX(-900px);
+    }
 
 }
 
 #message{
 
-font-size:40px;
-margin-top:20px;
-color:red;
+    position:absolute;
+
+    width:100%;
+
+    top:45%;
+
+    text-align:center;
+
+    font-size:60px;
+
+    color:#ff1493;
+
+    font-weight:bold;
+
+    text-shadow:3px 3px 10px white;
+
+    pointer-events:none;
+}
+
+/* Floating hearts after win */
+
+.floatHeart{
+
+    position:absolute;
+
+    font-size:35px;
+
+    animation:floatUp 3s linear forwards;
+}
+
+@keyframes floatUp{
+
+    0%{
+
+        transform:translateY(0);
+        opacity:1;
+    }
+
+    100%{
+
+        transform:translateY(-300px);
+        opacity:0;
+    }
+
+}
+
+/* Clouds */
+
+.cloud{
+
+    position:absolute;
+
+    font-size:60px;
+
+    animation:cloudMove 40s linear infinite;
+
+    opacity:.8;
+}
+
+.cloud:nth-child(1){
+
+    top:40px;
+}
+
+.cloud:nth-child(2){
+
+    top:120px;
+    animation-duration:55s;
+}
+
+@keyframes cloudMove{
+
+    from{
+
+        left:-200px;
+    }
+
+    to{
+
+        left:110%;
+    }
+
+}
+
+/* Responsive */
+
+@media(max-width:900px){
+
+    h1{
+
+        font-size:34px;
+    }
+
+    #score{
+
+        font-size:22px;
+    }
+
+    .bird{
+
+        font-size:60px;
+    }
+
+    #message{
+
+        font-size:40px;
+    }
 
 }
