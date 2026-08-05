@@ -1,122 +1,200 @@
-let anger=100;
-let love=50;
+const game = document.getElementById('game');
+const angryBird = document.getElementById('angry');
+const loveBird = document.getElementById('lovebird');
+const loveText = document.getElementById('love');
+const angerText = document.getElementById('anger');
+const message = document.getElementById('message');
 
-const game=document.getElementById("game");
+let gameWidth = window.innerWidth;
+let gameRunning = true;
 
-function update(){
+// Bird positions
+let angryX = 120;
+let loveX = gameWidth - 180;
 
-document.getElementById("love").innerHTML=love;
-document.getElementById("anger").innerHTML=anger;
+// Game values
+let love = 50;
+let anger = 100;
 
+// Set initial positions
+angryBird.style.left = angryX + 'px';
+loveBird.style.left = loveX + 'px';
+
+// Keyboard controls
+document.addEventListener('keydown', (e) => {
+    if (!gameRunning) return;
+
+    // Angry Bird controls
+    if (e.key === 'a' || e.key === 'A') {
+        angryX -= 25;
+    }
+    if (e.key === 'd' || e.key === 'D') {
+        angryX += 25;
+    }
+
+    // Love Bird controls
+    if (e.key === 'ArrowLeft') {
+        loveX -= 25;
+    }
+    if (e.key === 'ArrowRight') {
+        loveX += 25;
+    }
+
+    // Keep birds inside screen
+    angryX = Math.max(20, Math.min(gameWidth - 120, angryX));
+    loveX = Math.max(20, Math.min(gameWidth - 120, loveX));
+
+    angryBird.style.left = angryX + 'px';
+    loveBird.style.left = loveX + 'px';
+});
+
+// Update score display
+function updateScore() {
+    loveText.innerText = love;
+    angerText.innerText = anger;
 }
 
-function shootFire(){
+// Create fire projectile
+function shootFire() {
+    if (!gameRunning) return;
 
-let f=document.createElement("div");
+    const fire = document.createElement('div');
+    fire.innerHTML = '🔥';
+    fire.className = 'fire';
+    fire.style.position = 'absolute';
+    fire.style.fontSize = '35px';
+    fire.style.left = (angryX + 40) + 'px';
+    fire.style.bottom = '110px';
+    game.appendChild(fire);
 
-f.className="fire";
+    let x = angryX + 40;
 
-f.innerHTML="🔥";
+    const move = setInterval(() => {
+        x += 8;
+        fire.style.left = x + 'px';
 
-f.style.bottom="100px";
+        // Collision with Love Bird
+        if (x >= loveX - 10 && x <= loveX + 60) {
+            love -= 10;
+            if (love < 0) love = 0;
+            updateScore();
+            clearInterval(move);
+            fire.remove();
+            checkWin();
+        }
 
-game.appendChild(f);
-
-setTimeout(()=>{
-
-love-=10;
-
-if(love<0) love=0;
-
-update();
-
-f.remove();
-
-check();
-
-},2800);
-
+        // Remove if outside screen
+        if (x > gameWidth) {
+            clearInterval(move);
+            fire.remove();
+        }
+    }, 20);
 }
 
-function shootHeart(){
+// Create heart projectile
+function shootHeart() {
+    if (!gameRunning) return;
 
-let h=document.createElement("div");
+    const heart = document.createElement('div');
+    heart.innerHTML = '❤️';
+    heart.className = 'heart';
+    heart.style.position = 'absolute';
+    heart.style.fontSize = '35px';
+    heart.style.left = (loveX + 20) + 'px';
+    heart.style.bottom = '150px';
+    game.appendChild(heart);
 
-h.className="heart";
+    let x = loveX + 20;
 
-h.innerHTML="❤️";
+    const move = setInterval(() => {
+        x -= 8;
+        heart.style.left = x + 'px';
 
-h.style.bottom="150px";
+        // Collision with Angry Bird
+        if (x <= angryX + 60 && x >= angryX - 10) {
+            anger -= 10;
+            love += 5;
 
-game.appendChild(h);
+            if (anger < 0) anger = 0;
+            if (love > 100) love = 100;
 
-setTimeout(()=>{
+            updateScore();
+            clearInterval(move);
+            heart.remove();
+            checkWin();
+        }
 
-anger-=10;
-
-love+=5;
-
-if(anger<0) anger=0;
-
-update();
-
-h.remove();
-
-check();
-
-},2800);
-
+        // Remove if outside screen
+        if (x < -50) {
+            clearInterval(move);
+            heart.remove();
+        }
+    }, 20);
 }
 
-function check(){
-
-if(anger<=0 && love>=100){
-
-clearInterval(gameLoop);
-
-document.getElementById("message").innerHTML="💋 LOVE WINS ❤️";
-
-walkTogether();
-
+// Win condition
+function checkWin() {
+    if (anger <= 0 && love >= 100) {
+        gameRunning = false;
+        message.innerHTML = '💋 LOVE WINS ❤️';
+        walkTogether();
+    }
 }
 
+// Final animation
+function walkTogether() {
+    const walk = setInterval(() => {
+        angryX += 2;
+        loveX -= 2;
+
+        angryBird.style.left = angryX + 'px';
+        loveBird.style.left = loveX + 'px';
+
+        if (loveX - angryX < 80) {
+            clearInterval(walk);
+
+            angryBird.innerHTML = '🥰';
+            loveBird.innerHTML = '😍';
+
+            message.innerHTML = '💋 They Kiss Forever ❤️';
+
+            heartRain();
+        }
+    }, 20);
 }
 
-function walkTogether(){
+// Floating hearts animation
+function heartRain() {
+    setInterval(() => {
+        const h = document.createElement('div');
+        h.innerHTML = '❤️';
+        h.style.position = 'absolute';
+        h.style.left = (window.innerWidth / 2 + (Math.random() * 200 - 100)) + 'px';
+        h.style.bottom = '120px';
+        h.style.fontSize = '30px';
+        game.appendChild(h);
 
-let a=document.getElementById("angry");
+        let y = 120;
 
-let b=document.getElementById("lovebird");
+        const fly = setInterval(() => {
+            y += 3;
+            h.style.bottom = y + 'px';
 
-let x1=120;
-let x2=window.innerWidth-180;
-
-let t=setInterval(()=>{
-
-x1+=4;
-x2-=4;
-
-a.style.left=x1+"px";
-b.style.left=x2+"px";
-
-if(x2-x1<90){
-
-clearInterval(t);
-
-document.getElementById("message").innerHTML="💋 They Kiss Forever ❤️";
-
+            if (y > window.innerHeight) {
+                clearInterval(fly);
+                h.remove();
+            }
+        }, 20);
+    }, 300);
 }
 
-},20);
+// Start game loops
+updateScore();
 
-}
+setInterval(shootFire, 1200);
+setInterval(shootHeart, 1000);
 
-update();
-
-const gameLoop=setInterval(()=>{
-
-shootFire();
-
-shootHeart();
-
-},1000);
+// Resize handling
+window.addEventListener('resize', () => {
+    gameWidth = window.innerWidth;
+});
